@@ -1,0 +1,12 @@
+// Scroll animation effect
+document.addEventListener("scroll", () => {
+  let elements = document.querySelectorAll(".slide-up");
+  elements.forEach(el => {
+    let position = el.getBoundingClientRect().top;
+    let windowHeight = window.innerHeight;
+
+    if (position < windowHeight - 50) {
+      el.style.animationPlayState = "running";
+    }
+  });
+});
