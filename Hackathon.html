@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Activity Tracker</title>
+
+<style>
+body{
+font-family: Arial;
+background:#f2f2f2;
+margin:0;
+padding:0;
+}
+
+header{
+background:#4CAF50;
+color:white;
+text-align:center;
+padding:15px;
+}
+
+.container{
+width:80%;
+margin:auto;
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
+
+h2{
+text-align:center;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:10px;
+border:1px solid #ccc;
+text-align:center;
+}
+
+th{
+background:#4CAF50;
+color:white;
+}
+
+button{
+padding:6px 12px;
+background:#2196F3;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0b7dda;
+}
+
+.completed{
+color:green;
+font-weight:bold;
+}
+
+.pending{
+color:red;
+font-weight:bold;
+}
+
+.progress{
+margin-top:20px;
+font-size:18px;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Student Activity Tracker</h1>
+<p>Track your learning activities easily</p>
+</header>
+
+<div class="container">
+
+<h2>Activity List</h2>
+
+<table id="activityTable">
+
+<tr>
+<th>Activity</th>
+<th>Description</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+<tr>
+<td>HTML Practice</td>
+<td>Create basic HTML page</td>
+<td class="pending">Pending</td>
+<td><button onclick="completeTask(this)">Complete</button></td>
+</tr>
+
+<tr>
+<td>CSS Styling</td>
+<td>Design webpage layout</td>
+<td class="pending">Pending</td>
+<td><button onclick="completeTask(this)">Complete</button></td>
+</tr>
+
+<tr>
+<td>JavaScript Basics</td>
+<td>Learn JS functions</td>
+<td class="pending">Pending</td>
+<td><button onclick="completeTask(this)">Complete</button></td>
+</tr>
+
+<tr>
+<td>Project Work</td>
+<td>Build mini web project</td>
+<td class="pending">Pending</td>
+<td><button onclick="completeTask(this)">Complete</button></td>
+</tr>
+
+</table>
+
+<div class="progress">
+Progress: <span id="progress">0</span> Activities Completed
+</div>
+
+</div>
+
+<script>
+
+let completedCount = 0;
+
+function completeTask(button){
+
+let row = button.parentElement.parentElement;
+let statusCell = row.children[2];
+
+if(statusCell.innerHTML == "Pending"){
+
+statusCell.innerHTML = "Completed";
+statusCell.className = "completed";
+
+completedCount++;
+
+document.getElementById("progress").innerHTML = completedCount;
+
+button.disabled = true;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
