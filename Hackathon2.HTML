@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity Tracker</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .input-section {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 15px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    li.completed {
+        text-decoration: line-through;
+        color: gray;
+    }
+
+    .progress-container {
+        margin-top: 20px;
+    }
+
+    .progress-bar {
+        height: 20px;
+        background: #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress {
+        height: 100%;
+        width: 0%;
+        background: #4CAF50;
+        text-align: center;
+        color: white;
+        line-height: 20px;
+    }
+
+    .empty {
+        text-align: center;
+        color: gray;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Activity Tracker</h1>
+    <p>Track your daily tasks</p>
+</header>
+
+<div class="container">
+    <h2>Add Activity</h2>
+
+    <div class="input-section">
+        <input type="text" id="taskInput" placeholder="Enter activity...">
+        <button onclick="addTask()">Add</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <p id="emptyMessage" class="empty">No activities added</p>
+
+    <div class="progress-container">
+        <h3>Progress</h3>
+        <div class="progress-bar">
+            <div class="progress" id="progressBar">0%</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let tasks = [];
+
+    function addTask() {
+        const input = document.getElementById("taskInput");
+        const taskText = input.value.trim();
+
+        if (taskText === "") {
+            alert("Please enter a task");
+            return;
+        }
+
+        const task = {
+            text: taskText,
+            completed: false
+        };
+
+        tasks.push(task);
+        input.value = "";
+        renderTasks();
+    }
+
+    function toggleTask(index) {
+        tasks[index].completed = !tasks[index].completed;
+        renderTasks();
+    }
+
+    function renderTasks() {
+        const list = document.getElementById("taskList");
+        const emptyMsg = document.getElementById("emptyMessage");
+
+        list.innerHTML = "";
+
+        if (tasks.length === 0) {
+            emptyMsg.style.display = "block";
+        } else {
+            emptyMsg.style.display = "none";
+        }
+
+        tasks.forEach((task, index) => {
+            const li = document.createElement("li");
+
+            if (task.completed) {
+                li.classList.add("completed");
+            }
+
+            li.innerHTML = `
+                <span onclick="toggleTask(${index})">${task.text}</span>
+                <input type="checkbox" ${task.completed ? "checked" : ""} onclick="toggleTask(${index})">
+            `;
+
+            list.appendChild(li);
+        });
+
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const progressBar = document.getElementById("progressBar");
+
+        if (tasks.length === 0) {
+            progressBar.style.width = "0%";
+            progressBar.innerText = "0%";
+            return;
+        }
+
+        const completedTasks = tasks.filter(task => task.completed).length;
+        const percent = Math.round((completedTasks / tasks.length) * 100);
+
+        progressBar.style.width = percent + "%";
+        progressBar.innerText = percent + "%";
+    }
+</script>
+
+</body>
+</html>
