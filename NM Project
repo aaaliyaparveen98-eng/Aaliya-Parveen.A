@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Employee Leave Management Tool</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    padding:20px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+    margin-bottom:20px;
+}
+
+h2{
+    margin-top:20px;
+    margin-bottom:10px;
+}
+
+form{
+    display:grid;
+    gap:10px;
+}
+
+input,
+select,
+textarea{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    color:white;
+}
+
+.submit-btn{
+    background:#3498db;
+}
+
+.submit-btn:hover{
+    background:#2980b9;
+}
+
+.approve{
+    background:green;
+}
+
+.reject{
+    background:red;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table th,
+table td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+table th{
+    background:#3498db;
+    color:white;
+}
+
+.search-box{
+    width:100%;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>HR Employee Leave Management Tool</h1>
+
+<h2>Apply Leave</h2>
+
+<form id="leaveForm">
+
+<input type="text" id="employeeName" placeholder="Employee Name" required>
+
+<select id="leaveType" required>
+<option value="">Select Leave Type</option>
+<option>Casual Leave</option>
+<option>Sick Leave</option>
+<option>Emergency Leave</option>
+</select>
+
+<label>Start Date</label>
+<input type="date" id="startDate" required>
+
+<label>End Date</label>
+<input type="date" id="endDate" required>
+
+<textarea id="reason" placeholder="Reason for Leave" required></textarea>
+
+<button type="submit" class="submit-btn">
+Apply Leave
+</button>
+
+</form>
+
+<h2>Filter by Employee</h2>
+
+<input
+type="text"
+id="search"
+class="search-box"
+placeholder="Search Employee Name">
+
+<h2>Leave History</h2>
+
+<table>
+<thead>
+<tr>
+<th>Employee</th>
+<th>Leave Type</th>
+<th>Start Date</th>
+<th>End Date</th>
+<th>Reason</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="leaveTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+const leaveForm = document.getElementById("leaveForm");
+const leaveTable = document.getElementById("leaveTable");
+const search = document.getElementById("search");
+
+let leaveRequests = [];
+
+leaveForm.addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const employeeName =
+document.getElementById("employeeName").value;
+
+const leaveType =
+document.getElementById("leaveType").value;
+
+const startDate =
+document.getElementById("startDate").value;
+
+const endDate =
+document.getElementById("endDate").value;
+
+const reason =
+document.getElementById("reason").value;
+
+const leave = {
+id: Date.now(),
+employeeName,
+leaveType,
+startDate,
+endDate,
+reason,
+status:"Pending"
+};
+
+leaveRequests.push(leave);
+
+displayLeaves(leaveRequests);
+
+leaveForm.reset();
+
+});
+
+function displayLeaves(data){
+
+leaveTable.innerHTML = "";
+
+data.forEach((leave)=>{
+
+leaveTable.innerHTML += `
+<tr>
+<td>${leave.employeeName}</td>
+<td>${leave.leaveType}</td>
+<td>${leave.startDate}</td>
+<td>${leave.endDate}</td>
+<td>${leave.reason}</td>
+<td>${leave.status}</td>
+<td>
+
+<button
+class="approve"
+onclick="updateStatus(${leave.id},'Approved')">
+Approve
+</button>
+
+<button
+class="reject"
+onclick="updateStatus(${leave.id},'Rejected')">
+Reject
+</button>
+
+</td>
+</tr>
+`;
+
+});
+
+}
+
+function updateStatus(id,status){
+
+leaveRequests = leaveRequests.map((leave)=>{
+
+if(leave.id===id){
+leave.status=status;
+}
+
+return leave;
+
+});
+
+displayLeaves(leaveRequests);
+
+}
+
+search.addEventListener("keyup",function(){
+
+const value = search.value.toLowerCase();
+
+const filtered = leaveRequests.filter((leave)=>
+leave.employeeName.toLowerCase().includes(value)
+);
+
+displayLeaves(filtered);
+
+});
+
+</script>
+
+</body>
+</html>
